@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: bank-vs
+  namespace: bank
+spec:
+  hosts: ["app.local"]
+  gateways: ["bank-gw"]
+  http:
+    - match: [{ uri: { prefix: "/users" } }]
+      route: [{ destination: { host: users.bank.svc.cluster.local, port: { number: 80 } } }]
+    - match: [{ uri: { prefix: "/orders" } }]
+      route: [{ destination: { host: orders.bank.svc.cluster.local, port: { number: 80 } } }]
+    - match: [{ uri: { prefix: "/payments" } }]
+      route: [{ destination: { host: payments.bank.svc.cluster.local, port: { number: 80 } } }]

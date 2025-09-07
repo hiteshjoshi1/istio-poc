@@ -1,0 +1,8 @@
+# ignore demo certs/keys
+certs/
+*.key
+*.csr
+*.srl
+
+# OS cruft
+.DS_Store

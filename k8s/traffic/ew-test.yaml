@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: curl-plain
+  namespace: bank
+  annotations:
+    sidecar.istio.io/inject: "false"   # <-- no Envoy => sends plaintext
+spec:
+  restartPolicy: Never
+  containers:
+    - name: curl
+      image: curlimages/curl:8.9.1
+      command: ["sh","-lc"]
+      args:
+        - |
+          set -x
+          echo "Hitting users over plaintext (should FAIL):"
+          curl -v --max-time 5 users.bank.svc.cluster.local/health || echo "EXPECTED-FAIL(users)"
+          echo
+          echo "Hitting payments over plaintext (should FAIL):"
+          curl -v --max-time 5 payments.bank.svc.cluster.local/health || echo "EXPECTED-FAIL(payments)"
+          echo "DONE"

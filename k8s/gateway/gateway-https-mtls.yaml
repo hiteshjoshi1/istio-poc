@@ -1,0 +1,17 @@
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: bank-gw
+  namespace: bank
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port: { number: 80, name: http, protocol: HTTP }
+      hosts: ["app.local"]
+    - port: { number: 443, name: https-mtls, protocol: HTTPS }
+      hosts: ["app.local"]
+      tls:
+        mode: MUTUAL
+        credentialName: edge-mtls         # tls.key/tls.crt + ca.crt
+        minProtocolVersion: TLSV1_2
